@@ -15,13 +15,19 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { toast } from "@/components/ui/use-toast";
+import { toast, useToast } from "@/components/ui/use-toast";
+import { useState } from "react";
+import axios from "axios";
+import { BASE_URL, COURSES_URL } from "@/app/slices/constants";
 
 const FormSchema = z.object({
 	keyword: z.string(),
 });
 
-export function SearchBox() {
+export function SearchBox({ searchKeyword }: any) {
+	const { toast } = useToast();
+	const [loading, setLoading] = useState<boolean>(false);
+
 	const form = useForm<z.infer<typeof FormSchema>>({
 		resolver: zodResolver(FormSchema),
 		defaultValues: {
@@ -29,18 +35,10 @@ export function SearchBox() {
 		},
 	});
 
-	function onSubmit(data: z.infer<typeof FormSchema>) {
-		toast({
-			title: "You submitted the following values:",
-			description: (
-				<pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-					<code className="text-white">
-						{JSON.stringify(data, null, 2)}
-					</code>
-				</pre>
-			),
-		});
-	}
+	const onSubmit = async (values: z.infer<typeof FormSchema>) => {
+		searchKeyword(values.keyword);
+		// console.log(values.keyword);
+	};
 
 	return (
 		<Form {...form}>

@@ -4,7 +4,7 @@ import Course from "./Course";
 const Courses = ({ courses }: any) => {
 	return (
 		<div>
-			{courses.map(
+			{courses?.map(
 				(course: {
 					_id: string;
 					code: string;
@@ -15,6 +15,7 @@ const Courses = ({ courses }: any) => {
 				}) => (
 					<div key={course._id}>
 						<Course
+							id={course.course._id}
 							code={course.course.code}
 							image={course.course.user.image}
 							name={course.course.user.name}

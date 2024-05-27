@@ -4,11 +4,13 @@ import Image from "next/image";
 import Link from "next/link";
 
 const Course = ({
+	id,
 	code,
 	image,
 	name,
 	email,
 }: {
+	id: string;
 	code: string;
 	name: string;
 	email: string;
@@ -41,7 +43,7 @@ const Course = ({
 				className="uppercase font-semibold bg-green-200 text-black text-xs hover:bg-green-300 transition duration-100 ease-in-out"
 				asChild
 			>
-				<Link href="/course/1">
+				<Link href={`/course/${id}`}>
 					<Eye className="w-4 h-4 md:hidden" />
 					<span className="hidden md:block">View course</span>
 				</Link>

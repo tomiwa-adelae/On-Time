@@ -2,7 +2,7 @@
 import { Button } from "./ui/button";
 import Link from "next/link";
 import Image from "next/image";
-import { CirclePlus } from "lucide-react";
+import { CirclePlus, Loader2 } from "lucide-react";
 import { useToast } from "./ui/use-toast";
 import { useSelector } from "react-redux";
 import { BASE_URL, COURSES_URL } from "@/app/slices/constants";
@@ -21,7 +21,7 @@ const Course = ({
 	name: string;
 }) => {
 	const { toast } = useToast();
-	const [loading, setLoading] = useState<boolean>(true);
+	const [loading, setLoading] = useState<boolean>(false);
 
 	const { userInfo } = useSelector((state: any) => state.auth);
 
@@ -34,13 +34,17 @@ const Course = ({
 					"x-auth-token": userInfo.token,
 				},
 			};
-			const res = await axios.post(
+			await axios.post(
 				`${BASE_URL}${COURSES_URL}/students`,
 				{ id: _id },
 				config
 			);
 
-			console.log(res.data);
+			toast({
+				title: "Success!",
+				description: "You have successfully added the course",
+			});
+			setLoading(false);
 		} catch (error: any) {
 			setLoading(false);
 			toast({
@@ -48,6 +52,8 @@ const Course = ({
 				title: "Uh oh! Something went wrong.",
 				description: error.response.data.message,
 			});
+		} finally {
+			setLoading(false);
 		}
 	};
 
@@ -62,15 +68,20 @@ const Course = ({
 			/>
 			<h3 className="flex-1 text-base">{code}</h3>
 
-			<div
+			<Button
 				onClick={handleClick}
-				className="bg-green-100 p-2 md:p-4 inline rounded-lg mr-2 cursor-pointer hover:bg-green-200 transition-all ease-in-out"
+				className="bg-green-100 p-2 inline rounded-lg mr-2 cursor-pointer hover:bg-green-200 transition-all ease-in-out"
+				disabled={loading}
 			>
-				<CirclePlus
-					strokeWidth={0.5}
-					className="w-6 h-6 text-green-600"
-				/>
-			</div>
+				{loading ? (
+					<Loader2 className="h-6 w-6 animate-spin text-green-600" />
+				) : (
+					<CirclePlus
+						strokeWidth={0.5}
+						className="w-6 h-6 text-green-600"
+					/>
+				)}
+			</Button>
 		</div>
 	);
 };

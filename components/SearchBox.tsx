@@ -15,14 +15,24 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { toast } from "@/components/ui/use-toast";
-import { FolderSearch, UserSearch } from "lucide-react";
+import { useToast } from "@/components/ui/use-toast";
+import { FolderSearch, Loader2, UserSearch } from "lucide-react";
+
+import { useSelector } from "react-redux";
+import { useState } from "react";
+import axios from "axios";
+import { BASE_URL, COURSES_URL } from "@/app/slices/constants";
 
 const FormSchema = z.object({
 	keyword: z.string(),
 });
 
-export function SearchBox() {
+export function SearchBox({ successUpdate }: any) {
+	const { toast } = useToast();
+	const [loading, setLoading] = useState<boolean>(false);
+
+	const { userInfo } = useSelector((state: any) => state.auth);
+
 	const form = useForm<z.infer<typeof FormSchema>>({
 		resolver: zodResolver(FormSchema),
 		defaultValues: {
@@ -30,18 +40,33 @@ export function SearchBox() {
 		},
 	});
 
-	function onSubmit(data: z.infer<typeof FormSchema>) {
-		toast({
-			title: "You submitted the following values:",
-			description: (
-				<pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-					<code className="text-white">
-						{JSON.stringify(data, null, 2)}
-					</code>
-				</pre>
-			),
-		});
-	}
+	const onSubmit = async (values: z.infer<typeof FormSchema>) => {
+		try {
+			setLoading(true);
+			const config = {
+				headers: {
+					"Content-type": "application/json",
+					"x-auth-token": userInfo.token,
+				},
+			};
+
+			const res = await axios(
+				`${BASE_URL}${COURSES_URL}/students?keyword=${values.keyword}`,
+				config
+			);
+			setLoading(false);
+			successUpdate(res.data);
+		} catch (error: any) {
+			setLoading(false);
+			toast({
+				variant: "destructive",
+				title: "Uh oh! Something went wrong.",
+				description: error.response.data.message,
+			});
+		} finally {
+			setLoading(false);
+		}
+	};
 
 	return (
 		<Form {...form}>
@@ -64,8 +89,16 @@ export function SearchBox() {
 						</FormItem>
 					)}
 				/>
-				<Button className="uppercase font-semibold" type="submit">
-					<FolderSearch className="w-4 h-4" />
+				<Button
+					className="uppercase font-semibold"
+					type="submit"
+					disabled={loading}
+				>
+					{loading ? (
+						<Loader2 className="md:mr-2 h-4 w-4 animate-spin" />
+					) : (
+						<FolderSearch className="w-4 h-4" />
+					)}
 				</Button>
 			</form>
 		</Form>

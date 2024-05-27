@@ -61,7 +61,9 @@ const AddCoursesList = () => {
 
 	return (
 		<div className="my-6">
-			<SearchBox />
+			<SearchBox
+				successUpdate={(data: CoursesProps) => setCourses(data)}
+			/>
 			{loading && (
 				<div className="flex items-center justify-center mt-10">
 					<Loader2

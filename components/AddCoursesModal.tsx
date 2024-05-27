@@ -37,11 +37,8 @@ export function AddCoursesModal() {
 				<AddCoursesList />
 				<SheetFooter>
 					<SheetClose asChild>
-						<Button
-							className="uppercase w-full font-semibold"
-							type="submit"
-						>
-							Save changes
+						<Button className="uppercase w-full font-semibold">
+							Close
 						</Button>
 					</SheetClose>
 				</SheetFooter>
