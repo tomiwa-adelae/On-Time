@@ -45,7 +45,9 @@ const Wrapper = () => {
 						"x-auth-token": userInfo.token,
 					},
 				};
-				const url = userInfo.isLecturer ? "lecturers" : "students/mine";
+				const url = userInfo?.isLecturer
+					? "lecturers"
+					: "students/mine";
 
 				const res = await axios(
 					`${BASE_URL}${COURSES_URL}/${url}`,
@@ -101,7 +103,7 @@ const Wrapper = () => {
 		}
 
 		return courses.filter((item: any) => {
-			if (userInfo.isLecturer) {
+			if (userInfo?.isLecturer) {
 				return Object.values(item).some((value) =>
 					String(value).toLowerCase().includes(keyword.toLowerCase())
 				);
@@ -141,7 +143,7 @@ const Wrapper = () => {
 						{courses?.length}
 					</h3>
 				</Card>
-				{userInfo.isLecturer ? (
+				{userInfo?.isLecturer ? (
 					<CreateCourseModal />
 				) : (
 					<AddCoursesModal />
@@ -157,7 +159,7 @@ const Wrapper = () => {
 				</Card>
 			</div>
 			{courses.length === 0 && <NoCoursesAlert />}
-			{userInfo.isLecturer ? (
+			{userInfo?.isLecturer ? (
 				<LecturerContainer
 					courses={courses}
 					filteredCourses={filteredCourses}
