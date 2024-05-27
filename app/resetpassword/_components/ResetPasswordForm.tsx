@@ -21,15 +21,13 @@ import { Separator } from "@/components/ui/separator";
 
 const FormSchema = z.object({
 	email: z.string().email({ message: "Email is required!" }),
-	password: z.string().min(3, { message: "Password is required!" }),
 });
 
-export function SignInForm() {
+export function ResetPasswordForm() {
 	const form = useForm<z.infer<typeof FormSchema>>({
 		resolver: zodResolver(FormSchema),
 		defaultValues: {
 			email: "",
-			password: "",
 		},
 	});
 
@@ -49,7 +47,7 @@ export function SignInForm() {
 	return (
 		<div className="w-full md:w-3/5">
 			<h1 className="text-3xl text-center md:text-5xl md:text-left text-green-400 mb-6 w-full">
-				Sign into your account
+				Reset password
 			</h1>
 			<Form {...form}>
 				<form
@@ -76,26 +74,6 @@ export function SignInForm() {
 							</FormItem>
 						)}
 					/>
-					<FormField
-						control={form.control}
-						name="password"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Password</FormLabel>
-								<FormControl>
-									<Input
-										placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;"
-										{...field}
-									/>
-								</FormControl>
-								<FormDescription className="text-xs md:text-sm">
-									This should be the password you registered
-									with.
-								</FormDescription>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
 					<Button
 						className="uppercase font-semibold w-full md:w-auto"
 						type="submit"
@@ -103,22 +81,22 @@ export function SignInForm() {
 						Submit
 					</Button>
 					<p className="text-sm text-center lg:text-center">
+						Remembered your password already?{" "}
+						<Link
+							className="hover:underline hover:text-green-400"
+							href="/sign"
+						>
+							Sign in now
+						</Link>
+					</p>
+					<Separator />
+					<p className="text-sm text-center lg:text-center">
 						Don&apos; have an account?{" "}
 						<Link
 							className="hover:underline hover:text-green-400"
 							href="/signup"
 						>
 							Create one now
-						</Link>
-					</p>
-					<Separator />
-					<p className="text-sm text-center lg:text-center">
-						Forgot your password?{" "}
-						<Link
-							className="hover:underline hover:text-green-400"
-							href="/resetpassword"
-						>
-							Reset password
 						</Link>
 					</p>
 				</form>

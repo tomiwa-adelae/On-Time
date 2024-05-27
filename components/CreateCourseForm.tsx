@@ -15,27 +15,31 @@ import {
 
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
-import { Button } from "./ui/button";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
 
 const FormSchema = z.object({
-	currentPassword: z
+	title: z.string().min(2, { message: "Course title is required!" }),
+	code: z
 		.string()
-		.min(2, { message: "Current password is required!" }),
-	newPassword: z
-		.string()
-		.min(6, { message: "New password should be at least 6 characters!" }),
-	confirmPassword: z
-		.string()
-		.min(6, { message: "Confirm password is required!" }),
+		.min(7, { message: "Course code should be least 7 characters!" })
+		.max(7, { message: "Course code should be least 7 characters!" }),
+	unit: z.string().min(1, { message: "Course unit is required!" }),
 });
 
-export function ChangePasswordForm() {
+export function CreateCourseForm() {
 	const form = useForm<z.infer<typeof FormSchema>>({
 		resolver: zodResolver(FormSchema),
 		defaultValues: {
-			currentPassword: "",
-			newPassword: "",
-			confirmPassword: "",
+			title: "",
+			code: "",
+			unit: "",
 		},
 	});
 
@@ -61,13 +65,13 @@ export function ChangePasswordForm() {
 				>
 					<FormField
 						control={form.control}
-						name="currentPassword"
+						name="title"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>Current password</FormLabel>
+								<FormLabel>Course title</FormLabel>
 								<FormControl>
 									<Input
-										placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;"
+										placeholder="Introduction to computer..."
 										{...field}
 									/>
 								</FormControl>
@@ -77,13 +81,13 @@ export function ChangePasswordForm() {
 					/>
 					<FormField
 						control={form.control}
-						name="newPassword"
+						name="code"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>New password</FormLabel>
+								<FormLabel>Course code</FormLabel>
 								<FormControl>
 									<Input
-										placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;"
+										placeholder="CSC1101..."
 										{...field}
 									/>
 								</FormControl>
@@ -93,16 +97,30 @@ export function ChangePasswordForm() {
 					/>
 					<FormField
 						control={form.control}
-						name="confirmPassword"
+						name="unit"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>Confirm password</FormLabel>
-								<FormControl>
-									<Input
-										placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;"
-										{...field}
-									/>
-								</FormControl>
+								<FormLabel>Course unit</FormLabel>
+								<Select
+									onValueChange={field.onChange}
+									defaultValue={field.value}
+								>
+									<FormControl>
+										<SelectTrigger>
+											<SelectValue placeholder="Select your level" />
+										</SelectTrigger>
+									</FormControl>
+									<SelectContent>
+										<SelectItem value="1">1</SelectItem>
+										<SelectItem value="2">2</SelectItem>
+										<SelectItem value="3">3</SelectItem>
+										<SelectItem value="4">4</SelectItem>
+										<SelectItem value="6">6</SelectItem>
+										<SelectItem value="8">8</SelectItem>
+										<SelectItem value="11">11</SelectItem>
+										<SelectItem value="12">12</SelectItem>
+									</SelectContent>
+								</Select>
 								<FormMessage />
 							</FormItem>
 						)}

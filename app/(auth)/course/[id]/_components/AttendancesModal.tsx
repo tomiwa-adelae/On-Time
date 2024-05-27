@@ -1,7 +1,4 @@
-import { EditProfileForm } from "@/components/EditProfileForm";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
 	Sheet,
 	SheetClose,
@@ -12,28 +9,28 @@ import {
 	SheetTitle,
 	SheetTrigger,
 } from "@/components/ui/sheet";
-import { Pencil } from "lucide-react";
+import { Card } from "@/components/ui/card";
+import AttendeesList from "./AttendeesList";
 
-export function EditProfileModal() {
+export function AttendancesModal() {
 	return (
 		<Sheet>
 			<SheetTrigger asChild>
-				<Button className="uppercase mt-10 font-semibold mx-auto w-full md:w-auto">
-					<Pencil className="mr-2 w-4 h-4" />
-					Edit profile
-				</Button>
+				<Card className="text-center p-8 space-y-8 cursor-pointer">
+					<h4 className="text-base md:text-lg">12-May-2024</h4>
+				</Card>
 			</SheetTrigger>
 			<SheetContent className="overflow-y-auto">
 				<SheetHeader className="text-left">
 					<SheetTitle className="text-green-400 font-normal">
-						Edit profile
+						12-May-2024
 					</SheetTitle>
 					<SheetDescription className="text-xs">
-						Make changes to your profile here. Click save when
-						you&apos;re done.
+						These are the students that attended you class on this
+						date
 					</SheetDescription>
 				</SheetHeader>
-				<EditProfileForm />
+				<AttendeesList />
 			</SheetContent>
 		</Sheet>
 	);

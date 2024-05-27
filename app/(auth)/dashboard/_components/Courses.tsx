@@ -3,7 +3,7 @@ import Course from "./Course";
 
 const Courses = () => {
 	return (
-		<div className="space-y-4 mt-4">
+		<div className="space-y-4">
 			<Course />
 			<Separator />
 			<Course />

@@ -34,6 +34,13 @@ export function ProfileDropDown() {
 			<DropdownMenuContent className="w-72">
 				<DropdownMenuLabel>My Account</DropdownMenuLabel>
 				<DropdownMenuSeparator />
+				<Link href="/dashboard">
+					<DropdownMenuItem className="transition ease-in-out cursor-pointer py-4 hover:bg-gray-100">
+						<LayoutDashboard className="mr-2 h-4 w-4" />
+						<span>Dashboard</span>
+					</DropdownMenuItem>
+				</Link>
+				<DropdownMenuSeparator />
 				<Link href="/profile">
 					<DropdownMenuItem className="transition ease-in-out cursor-pointer py-4 hover:bg-gray-100">
 						<User className="mr-2 h-4 w-4" />
@@ -45,7 +52,7 @@ export function ProfileDropDown() {
 				<DropdownMenuSeparator />
 				<ChangePasswordModal />
 
-				<DropdownMenuSeparator />
+				{/* <DropdownMenuSeparator /> */}
 				{/* {isAdmin && (
 					<Link href="/admindashboard">
 						<DropdownMenuItem className="transition ease-in-out cursor-pointer py-4 hover:bg-gray-100">

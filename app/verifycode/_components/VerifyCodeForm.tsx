@@ -14,22 +14,30 @@ import {
 	FormLabel,
 	FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
 import Link from "next/link";
-import { Separator } from "@/components/ui/separator";
+import { useSearchParams } from "next/navigation";
+import {
+	InputOTP,
+	InputOTPGroup,
+	InputOTPSlot,
+} from "@/components/ui/input-otp";
 
 const FormSchema = z.object({
-	email: z.string().email({ message: "Email is required!" }),
-	password: z.string().min(3, { message: "Password is required!" }),
+	code: z.string().min(6, {
+		message: "Your one-time password must be 6 characters.",
+	}),
 });
 
-export function SignInForm() {
+export function VerifyCodeForm() {
+	const searchParams = useSearchParams();
+
+	const email = searchParams.get("email");
+
 	const form = useForm<z.infer<typeof FormSchema>>({
 		resolver: zodResolver(FormSchema),
 		defaultValues: {
-			email: "",
-			password: "",
+			code: "",
 		},
 	});
 
@@ -49,7 +57,7 @@ export function SignInForm() {
 	return (
 		<div className="w-full md:w-3/5">
 			<h1 className="text-3xl text-center md:text-5xl md:text-left text-green-400 mb-6 w-full">
-				Sign into your account
+				Verify code
 			</h1>
 			<Form {...form}>
 				<form
@@ -58,44 +66,30 @@ export function SignInForm() {
 				>
 					<FormField
 						control={form.control}
-						name="email"
+						name="code"
 						render={({ field }) => (
 							<FormItem>
 								<FormLabel>Email</FormLabel>
 								<FormControl>
-									<Input
-										placeholder="example@gmail.com"
-										{...field}
-									/>
+									<InputOTP maxLength={6} {...field}>
+										<InputOTPGroup>
+											<InputOTPSlot index={0} />
+											<InputOTPSlot index={1} />
+											<InputOTPSlot index={2} />
+											<InputOTPSlot index={3} />
+											<InputOTPSlot index={4} />
+											<InputOTPSlot index={5} />
+										</InputOTPGroup>
+									</InputOTP>
 								</FormControl>
 								<FormDescription className="text-xs md:text-sm">
-									This should be the email you registered
-									with.
+									This should be the code sent to your email.
 								</FormDescription>
 								<FormMessage />
 							</FormItem>
 						)}
 					/>
-					<FormField
-						control={form.control}
-						name="password"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Password</FormLabel>
-								<FormControl>
-									<Input
-										placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;"
-										{...field}
-									/>
-								</FormControl>
-								<FormDescription className="text-xs md:text-sm">
-									This should be the password you registered
-									with.
-								</FormDescription>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
+
 					<Button
 						className="uppercase font-semibold w-full md:w-auto"
 						type="submit"
@@ -103,22 +97,12 @@ export function SignInForm() {
 						Submit
 					</Button>
 					<p className="text-sm text-center lg:text-center">
-						Don&apos; have an account?{" "}
+						Remembered your password already?{" "}
 						<Link
 							className="hover:underline hover:text-green-400"
-							href="/signup"
+							href="/sign"
 						>
-							Create one now
-						</Link>
-					</p>
-					<Separator />
-					<p className="text-sm text-center lg:text-center">
-						Forgot your password?{" "}
-						<Link
-							className="hover:underline hover:text-green-400"
-							href="/resetpassword"
-						>
-							Reset password
+							Sign in now
 						</Link>
 					</p>
 				</form>

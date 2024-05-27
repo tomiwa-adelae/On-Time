@@ -9,6 +9,7 @@ import {
 	FormControl,
 	FormField,
 	FormItem,
+	FormLabel,
 	FormMessage,
 } from "@/components/ui/form";
 import {
@@ -20,6 +21,7 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
+import { Button } from "./ui/button";
 
 const FormSchema = z.object({
 	name: z.string().min(4, { message: "Name is required!" }),
@@ -76,6 +78,7 @@ export function EditProfileForm() {
 						name="name"
 						render={({ field }) => (
 							<FormItem>
+								<FormLabel>Name</FormLabel>
 								<FormControl>
 									<Input placeholder="John Doe" {...field} />
 								</FormControl>
@@ -88,6 +91,7 @@ export function EditProfileForm() {
 						name="email"
 						render={({ field }) => (
 							<FormItem>
+								<FormLabel>Email</FormLabel>
 								<FormControl>
 									<Input
 										placeholder="example@gmail.com"
@@ -103,6 +107,9 @@ export function EditProfileForm() {
 						name="matricNumber"
 						render={({ field }) => (
 							<FormItem>
+								<FormLabel>
+									Matriculation/admission number
+								</FormLabel>
 								<FormControl>
 									<Input
 										placeholder="example@gmail.com"
@@ -118,6 +125,7 @@ export function EditProfileForm() {
 						name="level"
 						render={({ field }) => (
 							<FormItem>
+								<FormLabel>Level</FormLabel>
 								<Select
 									onValueChange={field.onChange}
 									defaultValue={field.value}
@@ -144,6 +152,7 @@ export function EditProfileForm() {
 						name="department"
 						render={({ field }) => (
 							<FormItem>
+								<FormLabel>Department</FormLabel>
 								<Select
 									onValueChange={field.onChange}
 									defaultValue={field.value}
@@ -177,6 +186,7 @@ export function EditProfileForm() {
 						name="faculty"
 						render={({ field }) => (
 							<FormItem>
+								<FormLabel>Faculty</FormLabel>
 								<Select
 									onValueChange={field.onChange}
 									defaultValue={field.value}
@@ -200,6 +210,12 @@ export function EditProfileForm() {
 							</FormItem>
 						)}
 					/>
+					<Button
+						className="uppercase w-full font-semibold"
+						type="submit"
+					>
+						Save changes
+					</Button>
 				</form>
 			</Form>
 		</div>

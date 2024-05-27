@@ -5,6 +5,7 @@ import Image from "next/image";
 import React from "react";
 import { EditProfileModal } from "./EditProfileModal";
 import { ChangePasswordModal } from "./ChangePasswordModal";
+import { ChangeImageModal } from "./ChangeImageModal";
 
 const Head = () => {
 	return (
@@ -43,13 +44,16 @@ const Head = () => {
 						+234 708 4563 111
 					</h5>
 				</div>
-				<Image
-					src={"/test.jpg"}
-					alt="Test user"
-					height={1000}
-					width={1000}
-					className="w-24 h-24 object-cover rounded-full md:w-36 md:h-36 lg:w-44 lg:h-44"
-				/>
+				<div className="flex flex-col items-center justify-center gap-4">
+					<Image
+						src={"/test.jpg"}
+						alt="Test user"
+						height={1000}
+						width={1000}
+						className="w-24 h-24 object-cover rounded-full md:w-36 md:h-36 lg:w-44 lg:h-44"
+					/>
+					<ChangeImageModal />
+				</div>
 			</div>
 			<EditProfileModal />
 			<Separator className="my-10" />

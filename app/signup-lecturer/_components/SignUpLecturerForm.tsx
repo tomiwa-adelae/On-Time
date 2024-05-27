@@ -29,15 +29,10 @@ import { Separator } from "@/components/ui/separator";
 const FormSchema = z.object({
 	name: z.string().min(4, { message: "Name is required!" }),
 	email: z.string().email({ message: "Email is required!" }),
-	matricNumber: z
-		.string()
-		.min(8, { message: "Matriculation/Admission number is required!" })
-		.max(12, { message: "Enter valid matriculation/admission number!" }),
 	phoneNumber: z
 		.string()
 		.min(10, { message: "Phone number is required!" })
 		.max(11, { message: "Enter valid number" }),
-	level: z.string().min(3, { message: "Academic level is required!" }),
 	department: z.string().min(3, { message: "Department is required!" }),
 	faculty: z.string().min(3, { message: "Department is required!" }),
 	password: z
@@ -45,15 +40,13 @@ const FormSchema = z.object({
 		.min(6, { message: "Password should be at least 6 characters!" }),
 });
 
-export function SignUpForm() {
+export function SignUpLecturerForm() {
 	const form = useForm<z.infer<typeof FormSchema>>({
 		resolver: zodResolver(FormSchema),
 		defaultValues: {
 			name: "",
 			email: "",
-			matricNumber: "",
 			phoneNumber: "",
-			level: "",
 			department: "",
 			faculty: "",
 			password: "",
@@ -79,13 +72,13 @@ export function SignUpForm() {
 				Personal Information
 			</h1>
 			<p className="text-xs text-center lg:text-left mb-4 md:text-sm">
-				Let&apos; create your account so you can access your classes at
-				On Time |{" "}
+				Let&apos; create a lecturer account so you can create courses
+				and have student take your classes at On Time |{" "}
 				<Link
 					className="transition ease-in-out hover:underline hover:text-green-400"
-					href="/signuplecturer"
+					href="/signup"
 				>
-					Create an account as a lecturer
+					Create an account as a student
 				</Link>
 			</p>
 			<Form {...form}>
@@ -123,58 +116,6 @@ export function SignUpForm() {
 								</FormControl>
 								<FormDescription className="text-xs md:text-sm">
 									This is your public display email.
-								</FormDescription>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
-					<FormField
-						control={form.control}
-						name="matricNumber"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>
-									Matriculation/Admission number
-								</FormLabel>
-								<FormControl>
-									<Input
-										placeholder="example@gmail.com"
-										{...field}
-									/>
-								</FormControl>
-								<FormDescription className="text-xs md:text-sm">
-									This is your public display
-									matriculation/admission number.
-								</FormDescription>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
-					<FormField
-						control={form.control}
-						name="level"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Level</FormLabel>
-								<Select
-									onValueChange={field.onChange}
-									defaultValue={field.value}
-								>
-									<FormControl>
-										<SelectTrigger>
-											<SelectValue placeholder="Select your level" />
-										</SelectTrigger>
-									</FormControl>
-									<SelectContent>
-										<SelectItem value="100">100</SelectItem>
-										<SelectItem value="200">200</SelectItem>
-										<SelectItem value="300">300</SelectItem>
-										<SelectItem value="400">400</SelectItem>
-										<SelectItem value="500">500</SelectItem>
-									</SelectContent>
-								</Select>
-								<FormDescription>
-									This is your public display faculty.
 								</FormDescription>
 								<FormMessage />
 							</FormItem>
@@ -286,12 +227,12 @@ export function SignUpForm() {
 					<Separator />
 
 					<p className="text-sm text-center lg:text-center">
-						Are you a lecturer?{" "}
+						Are you a student?{" "}
 						<Link
 							className="transition ease-in-out hover:underline hover:text-green-400"
-							href="/signuplecturer"
+							href="/signup"
 						>
-							Create a lecturer account now
+							Create a student account now
 						</Link>
 					</p>
 				</form>

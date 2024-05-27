@@ -1,11 +1,12 @@
 import { Button } from "@/components/ui/button";
+import { Eye } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
 const Course = () => {
 	return (
-		<div className="relative flex items-center justify-between gap-2 md:gap-4">
+		<div className="flex items-center justify-between gap-2 md:gap-4">
 			<Image
 				src={"/test.jpg"}
 				alt="Test user"
@@ -21,7 +22,10 @@ const Course = () => {
 				className="uppercase font-semibold bg-green-200 text-black text-xs hover:bg-green-300 transition duration-100 ease-in-out"
 				asChild
 			>
-				<Link href="/">View course</Link>
+				<Link href="/course/1">
+					<Eye className="w-4 h-4 md:hidden" />
+					<span className="hidden md:block">View course</span>
+				</Link>
 			</Button>
 		</div>
 	);
