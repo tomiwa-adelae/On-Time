@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -25,6 +26,14 @@ import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
 import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
+import { useToast } from "@/components/ui/use-toast";
+
+import { setCredentials } from "@/app/slices/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
+import { BASE_URL, USERS_URL } from "@/app/slices/constants";
+import { Loader2 } from "lucide-react";
+import { useEffect, useState } from "react";
 
 const FormSchema = z.object({
 	name: z.string().min(4, { message: "Name is required!" }),
@@ -46,6 +55,21 @@ const FormSchema = z.object({
 });
 
 export function SignUpForm() {
+	const { toast } = useToast();
+
+	const dispatch = useDispatch();
+	const router = useRouter();
+
+	const { userInfo } = useSelector((state: any) => state.auth);
+
+	const [loading, setLoading] = useState<boolean>(false);
+
+	useEffect(() => {
+		if (userInfo) {
+			return router.push("/dashboard");
+		}
+	}, [userInfo, router]);
+
 	const form = useForm<z.infer<typeof FormSchema>>({
 		resolver: zodResolver(FormSchema),
 		defaultValues: {
@@ -60,18 +84,38 @@ export function SignUpForm() {
 		},
 	});
 
-	function onSubmit(data: z.infer<typeof FormSchema>) {
-		toast({
-			title: "You submitted the following values:",
-			description: (
-				<pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-					<code className="text-white">
-						{JSON.stringify(data, null, 2)}
-					</code>
-				</pre>
-			),
-		});
-	}
+	// 2. Define a submit handler.
+	const onSubmit = async (values: z.infer<typeof FormSchema>) => {
+		try {
+			setLoading(true);
+			const config = {
+				headers: {
+					"Content-type": "application/json",
+				},
+			};
+			const res = await axios.post(
+				`${BASE_URL}${USERS_URL}`,
+				values,
+				config
+			);
+			dispatch(setCredentials({ ...res.data }));
+			setLoading(false);
+			toast({
+				title: "Success!",
+				description: "You have successfully created an account",
+			});
+			router.push("/dashboard");
+		} catch (error: any) {
+			setLoading(false);
+			toast({
+				variant: "destructive",
+				title: "Uh oh! Something went wrong.",
+				description: error.response.data.message,
+			});
+		} finally {
+			setLoading(false);
+		}
+	};
 
 	return (
 		<div className="w-full md:w-4/5">
@@ -145,6 +189,25 @@ export function SignUpForm() {
 								<FormDescription className="text-xs md:text-sm">
 									This is your public display
 									matriculation/admission number.
+								</FormDescription>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+					<FormField
+						control={form.control}
+						name="phoneNumber"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>Phone number</FormLabel>
+								<FormControl>
+									<Input
+										placeholder="09012345678"
+										{...field}
+									/>
+								</FormControl>
+								<FormDescription className="text-xs md:text-sm">
+									This is your public phone number.
 								</FormDescription>
 								<FormMessage />
 							</FormItem>
@@ -257,6 +320,7 @@ export function SignUpForm() {
 								<FormLabel>Password</FormLabel>
 								<FormControl>
 									<Input
+										type="password"
 										placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;"
 										{...field}
 									/>
@@ -271,8 +335,16 @@ export function SignUpForm() {
 					<Button
 						className="uppercase font-semibold w-full md:w-auto"
 						type="submit"
+						disabled={loading}
 					>
-						Submit
+						{loading ? (
+							<>
+								<Loader2 className="mr-2 h-4 w-4 animate-spin" />{" "}
+								Please wait
+							</>
+						) : (
+							"Submit"
+						)}
 					</Button>
 					<p className="text-sm text-center lg:text-center">
 						Already have an account?{" "}

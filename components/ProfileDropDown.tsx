@@ -19,13 +19,19 @@ import Link from "next/link";
 import { EditProfileModal } from "./EditProfileModal";
 import { ChangePasswordModal } from "./ChangePasswordModal";
 
-export function ProfileDropDown() {
+export function ProfileDropDown({
+	name,
+	image,
+}: {
+	name: string;
+	image: string;
+}) {
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
 				<Image
-					src={"/test.jpg"}
-					alt={"Test User"}
+					src={image}
+					alt={name}
 					height={1000}
 					width={1000}
 					className="w-10 h-10 rounded-full cursor-pointer object-cover"

@@ -1,5 +1,8 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -15,9 +18,15 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { toast } from "@/components/ui/use-toast";
-import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
+import { useToast } from "@/components/ui/use-toast";
+
+import { setCredentials } from "@/app/slices/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
+import { BASE_URL, USERS_URL } from "@/app/slices/constants";
+import { Loader2 } from "lucide-react";
+import { useEffect, useState } from "react";
 
 const FormSchema = z.object({
 	email: z.string().email({ message: "Email is required!" }),
@@ -25,6 +34,21 @@ const FormSchema = z.object({
 });
 
 export function SignInForm() {
+	const { toast } = useToast();
+
+	const dispatch = useDispatch();
+	const router = useRouter();
+
+	const { userInfo } = useSelector((state: any) => state.auth);
+
+	const [loading, setLoading] = useState<boolean>(false);
+
+	useEffect(() => {
+		if (userInfo) {
+			return router.push("/dashboard");
+		}
+	}, [userInfo, router]);
+
 	const form = useForm<z.infer<typeof FormSchema>>({
 		resolver: zodResolver(FormSchema),
 		defaultValues: {
@@ -33,18 +57,38 @@ export function SignInForm() {
 		},
 	});
 
-	function onSubmit(data: z.infer<typeof FormSchema>) {
-		toast({
-			title: "You submitted the following values:",
-			description: (
-				<pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-					<code className="text-white">
-						{JSON.stringify(data, null, 2)}
-					</code>
-				</pre>
-			),
-		});
-	}
+	// 2. Define a submit handler.
+	const onSubmit = async (values: z.infer<typeof FormSchema>) => {
+		try {
+			setLoading(true);
+			const config = {
+				headers: {
+					"Content-type": "application/json",
+				},
+			};
+			const res = await axios.post(
+				`${BASE_URL}${USERS_URL}/auth`,
+				values,
+				config
+			);
+			dispatch(setCredentials({ ...res.data }));
+			setLoading(false);
+			toast({
+				title: "Success!",
+				description: "You have successfully signed into your account",
+			});
+			router.push("/dashboard");
+		} catch (error: any) {
+			setLoading(false);
+			toast({
+				variant: "destructive",
+				title: "Uh oh! Something went wrong.",
+				description: error.response.data.message,
+			});
+		} finally {
+			setLoading(false);
+		}
+	};
 
 	return (
 		<div className="w-full md:w-3/5">
@@ -84,6 +128,7 @@ export function SignInForm() {
 								<FormLabel>Password</FormLabel>
 								<FormControl>
 									<Input
+										type="password"
 										placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;"
 										{...field}
 									/>
@@ -99,8 +144,16 @@ export function SignInForm() {
 					<Button
 						className="uppercase font-semibold w-full md:w-auto"
 						type="submit"
+						disabled={loading}
 					>
-						Submit
+						{loading ? (
+							<>
+								<Loader2 className="mr-2 h-4 w-4 animate-spin" />{" "}
+								Please wait
+							</>
+						) : (
+							"Submit"
+						)}
 					</Button>
 					<p className="text-sm text-center lg:text-center">
 						Don&apos; have an account?{" "}
