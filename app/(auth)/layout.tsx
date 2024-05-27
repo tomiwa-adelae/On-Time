@@ -9,6 +9,6 @@ export default function AuthLayout({
 }>) {
 	const { userInfo } = useSelector((state: any) => state.auth);
 
-	// if (userInfo === null) return redirect("/signin");
+	if (userInfo === null) return redirect("/signin");
 	return <div>{children}</div>;
 }
