@@ -53,6 +53,8 @@ const AddCoursesList = () => {
 					title: "Uh oh! Something went wrong.",
 					description: error.response.data.message,
 				});
+			} finally {
+				setLoading(false);
 			}
 		};
 

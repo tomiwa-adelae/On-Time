@@ -6,18 +6,21 @@ import { Separator } from "@/components/ui/separator";
 import { useSelector } from "react-redux";
 import { useToast } from "@/components/ui/use-toast";
 import axios from "axios";
-import { ATTENDANCE_URL, BASE_URL } from "@/app/slices/constants";
+import { ATTENDANCE_URL, BASE_URL, COURSES_URL } from "@/app/slices/constants";
 import { NoAttendanceAlert } from "./NoAttendanceAlert";
 import Head from "./Head";
+import { StepLoader } from "@/components/StepLoader";
 
 interface Attendance {
 	_id: string;
 	date: string;
 	course: {
 		code: string;
+		title: string;
 		user: {
 			name: string;
 			image: string;
+			email: string;
 		};
 	};
 }
@@ -25,12 +28,23 @@ interface Attendance {
 
 type AttendanceProps = Attendance[];
 
+interface Course {
+	_id: string;
+	code: string;
+	title: string;
+	user: {
+		name: string;
+		email: string;
+	};
+}
+
 const StudentContainer = ({ id }: { id: string }) => {
 	const { toast } = useToast();
 
 	const [loading, setLoading] = useState<boolean>(false);
 
 	const [attendance, setAttendance] = useState<AttendanceProps>([]);
+	const [course, setCourse] = useState<Course>();
 
 	const { userInfo } = useSelector((state: any) => state.auth);
 
@@ -45,12 +59,18 @@ const StudentContainer = ({ id }: { id: string }) => {
 					},
 				};
 
+				const response = await axios(
+					`${BASE_URL}${COURSES_URL}/students/${id}`,
+					config
+				);
+
 				const res = await axios(
 					`${BASE_URL}${ATTENDANCE_URL}/${id}`,
 					config
 				);
 
 				setAttendance(res.data);
+				setCourse(response.data);
 				setLoading(false);
 			} catch (error: any) {
 				setLoading(false);
@@ -67,11 +87,16 @@ const StudentContainer = ({ id }: { id: string }) => {
 		fetchCourses();
 	}, [toast, userInfo, id]);
 
-	if (loading) return null;
+	if (loading) return <StepLoader />;
 
 	return (
 		<div>
-			<Head />
+			<Head
+				name={course?.user.name!}
+				email={course?.user.email!}
+				title={course?.title!}
+				code={course?.code!}
+			/>
 			<Separator className="my-10" />
 			<div className="space-y-6">
 				<h3 className="text-xl md:text-2xl mb-4">Attendance</h3>

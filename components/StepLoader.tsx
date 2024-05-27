@@ -4,10 +4,10 @@ import { MultiStepLoader as Loader } from "@/components/ui/multi-step-loader";
 
 const loadingStates = [
 	{
-		text: "Getting everything ready",
+		text: "Initializing System",
 	},
 	{
-		text: "Loading all courses",
+		text: "Reading QR Code",
 	},
 	{
 		text: "Fetching latest content",
@@ -16,10 +16,13 @@ const loadingStates = [
 		text: "Setting up your dashboard",
 	},
 	{
-		text: "Almost there",
+		text: "Processing Data",
 	},
 	{
-		text: "Ready to learn!",
+		text: "Updating Attendance",
+	},
+	{
+		text: "Almost there",
 	},
 ];
 

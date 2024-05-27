@@ -13,6 +13,7 @@ import { FolderSync } from "lucide-react";
 import { NoCoursesAlert } from "@/components/NoCoursesAlert";
 import StudentContainer from "./_student_components/StudentContainer";
 import LecturerContainer from "./_lecturer_components/LecturerContainer";
+import { StepLoader } from "@/components/StepLoader";
 
 interface Courses {
 	_id: string;
@@ -81,7 +82,6 @@ const Wrapper = () => {
 
 			const res = await axios(`${BASE_URL}${COURSES_URL}/${url}`, config);
 
-			setCourses(res.data);
 			setLoading(false);
 		} catch (error: any) {
 			setLoading(false);
@@ -94,8 +94,6 @@ const Wrapper = () => {
 			setLoading(false);
 		}
 	};
-
-	console.log(courses);
 
 	const handleSearch = (courses: any, keyword: any) => {
 		if (!keyword) {
@@ -127,7 +125,7 @@ const Wrapper = () => {
 		});
 	};
 
-	if (loading) return null;
+	if (loading) return <StepLoader />;
 
 	return (
 		<div className="mt-8">

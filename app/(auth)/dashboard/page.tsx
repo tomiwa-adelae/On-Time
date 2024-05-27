@@ -1,6 +1,12 @@
 import React from "react";
 import Wrapper from "./_components/Wrapper";
 
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+	title: "Dashboard | On Time",
+};
+
 const page = () => {
 	return (
 		<div className="container py-14">

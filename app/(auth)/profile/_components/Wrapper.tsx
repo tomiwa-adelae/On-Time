@@ -11,6 +11,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { BASE_URL, COURSES_URL } from "@/app/slices/constants";
+import { StepLoader } from "@/components/StepLoader";
 
 interface Courses {
 	_id: string;
@@ -58,7 +59,6 @@ const Wrapper = () => {
 					description:
 						error.response.data.message || "An error occurred!",
 				});
-				// console.log(error);
 			} finally {
 				setLoading(false);
 			}
@@ -94,7 +94,7 @@ const Wrapper = () => {
 		}
 	};
 
-	if (loading || !userInfo) return null;
+	if (loading || !userInfo) return <StepLoader />;
 
 	return (
 		<div>
