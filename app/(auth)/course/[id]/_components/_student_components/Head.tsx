@@ -3,7 +3,7 @@ import { ImagePlus, Mail, UserRound } from "lucide-react";
 import Image from "next/image";
 import React from "react";
 
-const Head = ({ isLecturer }: { isLecturer: boolean }) => {
+const Head = () => {
 	return (
 		<div className="flex flex-col items-start justify-start md:flex-row gap-6 md:justify-between md:items-center">
 			<div className="space-y-10">
@@ -33,7 +33,7 @@ const Head = ({ isLecturer }: { isLecturer: boolean }) => {
 					</a>
 				</h5>
 			</div>
-			{isLecturer && (
+			{/* {isLecturer && (
 				<Card className="w-full md:w-auto text-center cursor-pointer flex items-center justify-center p-8 space-y-8">
 					<div>
 						<ImagePlus
@@ -44,7 +44,7 @@ const Head = ({ isLecturer }: { isLecturer: boolean }) => {
 							Generate QR Code
 						</p>
 					</div>
-					{/* <Image
+					<Image
 					src={
 						""
 					}
@@ -52,9 +52,9 @@ const Head = ({ isLecturer }: { isLecturer: boolean }) => {
 					height={1000}
 					width={1000}
 					className="w-full h-full aspect-square object-cover"
-				/> */}
+				/>
 				</Card>
-			)}
+			)} */}
 		</div>
 	);
 };

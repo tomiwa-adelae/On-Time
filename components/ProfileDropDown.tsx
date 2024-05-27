@@ -18,6 +18,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { EditProfileModal } from "./EditProfileModal";
 import { ChangePasswordModal } from "./ChangePasswordModal";
+import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
+import axios from "axios";
+import { BASE_URL, USERS_URL } from "@/app/slices/constants";
+import { logout, setCredentials } from "@/app/slices/authSlice";
+import { useToast } from "./ui/use-toast";
 
 export function ProfileDropDown({
 	name,
@@ -26,6 +32,32 @@ export function ProfileDropDown({
 	name: string;
 	image: string;
 }) {
+	const router = useRouter();
+	const { toast } = useToast();
+	const dispatch = useDispatch();
+	const handleLogout = async () => {
+		try {
+			await axios.post(`${BASE_URL}${USERS_URL}/logout`);
+			dispatch(logout({ message: "logout" }));
+			dispatch(setCredentials(null));
+			toast({
+				title: "Success!",
+				description: "You have successfully logged out.",
+			});
+
+			router.push("/signin");
+			setTimeout(() => {
+				window.location.reload();
+			}, 2000);
+		} catch (error: any) {
+			toast({
+				variant: "destructive",
+				title: "Uh oh! Something went wrong.",
+				description: error.response.data.message,
+			});
+		}
+	};
+
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
@@ -57,20 +89,10 @@ export function ProfileDropDown({
 				<EditProfileModal />
 				<DropdownMenuSeparator />
 				<ChangePasswordModal />
-
-				{/* <DropdownMenuSeparator /> */}
-				{/* {isAdmin && (
-					<Link href="/admindashboard">
-						<DropdownMenuItem className="transition ease-in-out cursor-pointer py-4 hover:bg-gray-100">
-							<LayoutDashboard className="mr-2 h-4 w-4" />
-							<span>Admin dashboard</span>
-						</DropdownMenuItem>
-					</Link>
-				)} */}
 				<DropdownMenuSeparator />
 
 				<DropdownMenuItem
-					// onClick={handleLogout}
+					onClick={handleLogout}
 					className="transition ease-in-out cursor-pointer py-4 hover:bg-slate-100 text-destructive font-semibold"
 				>
 					<LogOut className="mr-2 h-4 w-4" />

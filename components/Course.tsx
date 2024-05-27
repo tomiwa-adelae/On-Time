@@ -42,7 +42,7 @@ const Course = ({
 
 			toast({
 				title: "Success!",
-				description: "You have successfully added the course",
+				description: "You have successfully added the course!",
 			});
 			setLoading(false);
 		} catch (error: any) {

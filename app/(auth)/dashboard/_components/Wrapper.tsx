@@ -1,7 +1,6 @@
 "use client";
 
 import { SearchBox } from "./SearchBox";
-import Courses from "./Courses";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { BASE_URL, COURSES_URL } from "@/app/slices/constants";
@@ -12,6 +11,8 @@ import { CreateCourseModal } from "@/components/CreateCourseModal";
 import { AddCoursesModal } from "@/components/AddCoursesModal";
 import { FolderSync } from "lucide-react";
 import { NoCoursesAlert } from "@/components/NoCoursesAlert";
+import StudentContainer from "./_student_components/StudentContainer";
+import LecturerContainer from "./_lecturer_components/LecturerContainer";
 
 interface Courses {
 	_id: string;
@@ -76,7 +77,7 @@ const Wrapper = () => {
 					"x-auth-token": userInfo.token,
 				},
 			};
-			const url = userInfo.isLecturer ? "lecturers" : "students/mine";
+			const url = userInfo?.isLecturer ? "lecturers" : "students/mine";
 
 			const res = await axios(`${BASE_URL}${COURSES_URL}/${url}`, config);
 
@@ -94,26 +95,35 @@ const Wrapper = () => {
 		}
 	};
 
+	console.log(courses);
+
 	const handleSearch = (courses: any, keyword: any) => {
 		if (!keyword) {
 			return courses;
 		}
-		return courses.filter((item: any) => {
-			const course = item.course;
-			const user = course.user;
 
-			return (
-				Object.values(course).some(
-					(value) =>
-						typeof value === "string" &&
-						value.toLowerCase().includes(keyword.toLowerCase())
-				) ||
-				Object.values(user).some(
-					(value) =>
-						typeof value === "string" &&
-						value.toLowerCase().includes(keyword.toLowerCase())
-				)
-			);
+		return courses.filter((item: any) => {
+			if (userInfo.isLecturer) {
+				return Object.values(item).some((value) =>
+					String(value).toLowerCase().includes(keyword.toLowerCase())
+				);
+			} else {
+				const course = item.course;
+				const user = course.user;
+
+				return (
+					Object.values(course).some(
+						(value) =>
+							typeof value === "string" &&
+							value.toLowerCase().includes(keyword.toLowerCase())
+					) ||
+					Object.values(user).some(
+						(value) =>
+							typeof value === "string" &&
+							value.toLowerCase().includes(keyword.toLowerCase())
+					)
+				);
+			}
 		});
 	};
 
@@ -149,11 +159,17 @@ const Wrapper = () => {
 				</Card>
 			</div>
 			{courses.length === 0 && <NoCoursesAlert />}
-			<Courses
-				courses={
-					filteredCourses.length !== 0 ? filteredCourses : courses
-				}
-			/>
+			{userInfo.isLecturer ? (
+				<LecturerContainer
+					courses={courses}
+					filteredCourses={filteredCourses}
+				/>
+			) : (
+				<StudentContainer
+					courses={courses}
+					filteredCourses={filteredCourses}
+				/>
+			)}
 		</div>
 	);
 };

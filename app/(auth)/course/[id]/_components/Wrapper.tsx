@@ -1,8 +1,6 @@
 "use client";
 
 import React from "react";
-import Head from "./Head";
-import { Separator } from "@/components/ui/separator";
 import { useSelector } from "react-redux";
 import StudentContainer from "./_student_components/StudentContainer";
 import LecturerContainer from "./_lecturer_components/LecturerContainer";
@@ -12,10 +10,8 @@ const Wrapper = ({ id }: { id: string }) => {
 
 	return (
 		<div>
-			<Head isLecturer={userInfo.isLecturer} />
-			<Separator className="my-10" />
 			{userInfo.isLecturer ? (
-				<LecturerContainer />
+				<LecturerContainer id={id} />
 			) : (
 				<StudentContainer id={id} />
 			)}

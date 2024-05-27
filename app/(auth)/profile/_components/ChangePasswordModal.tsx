@@ -32,16 +32,6 @@ export function ChangePasswordModal() {
 					</SheetDescription>
 				</SheetHeader>
 				<ChangePasswordForm />
-				<SheetFooter>
-					<SheetClose asChild>
-						<Button
-							className="uppercase w-full font-semibold"
-							type="submit"
-						>
-							Save changes
-						</Button>
-					</SheetClose>
-				</SheetFooter>
 			</SheetContent>
 		</Sheet>
 	);

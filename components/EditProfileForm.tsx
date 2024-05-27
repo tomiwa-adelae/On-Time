@@ -20,8 +20,15 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import { toast } from "@/components/ui/use-toast";
+import { toast, useToast } from "@/components/ui/use-toast";
 import { Button } from "./ui/button";
+
+import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
+import axios from "axios";
+import { BASE_URL, USERS_URL } from "@/app/slices/constants";
+import { setCredentials } from "@/app/slices/authSlice";
+import { Loader2 } from "lucide-react";
 
 const FormSchema = z.object({
 	name: z.string().min(4, { message: "Name is required!" }),
@@ -40,31 +47,60 @@ const FormSchema = z.object({
 });
 
 export function EditProfileForm() {
+	const dispatch = useDispatch();
+	const { toast } = useToast();
+
+	const [loading, setLoading] = useState<boolean>(false);
+
+	const { userInfo } = useSelector((state: any) => state.auth);
+
 	const form = useForm<z.infer<typeof FormSchema>>({
 		resolver: zodResolver(FormSchema),
 		defaultValues: {
-			name: "",
-			email: "",
-			matricNumber: "",
-			phoneNumber: "",
-			level: "",
-			department: "",
-			faculty: "",
+			name: userInfo.name,
+			email: userInfo.email,
+			matricNumber: userInfo.matricNumber,
+			phoneNumber: userInfo.phoneNumber,
+			level: userInfo.level,
+			department: userInfo.department,
+			faculty: userInfo.faculty,
 		},
 	});
 
-	function onSubmit(data: z.infer<typeof FormSchema>) {
-		toast({
-			title: "You submitted the following values:",
-			description: (
-				<pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-					<code className="text-white">
-						{JSON.stringify(data, null, 2)}
-					</code>
-				</pre>
-			),
-		});
-	}
+	// 2. Define a submit handler.
+	const onSubmit = async (values: z.infer<typeof FormSchema>) => {
+		try {
+			setLoading(true);
+
+			const config = {
+				headers: {
+					"Content-type": "application/json",
+					"x-auth-token": userInfo.token,
+				},
+			};
+
+			const res = await axios.put(
+				`${BASE_URL}${USERS_URL}/profile`,
+				values,
+				config
+			);
+			dispatch(setCredentials({ ...res.data }));
+			setLoading(false);
+			toast({
+				title: "Success!",
+				description: "You have successfully updated your profile",
+			});
+		} catch (error: any) {
+			setLoading(false);
+			toast({
+				variant: "destructive",
+				title: "Uh oh! Something went wrong.",
+				description: error.response.data.message,
+			});
+		} finally {
+			setLoading(false);
+		}
+	};
 
 	return (
 		<div className="my-6">
@@ -213,8 +249,16 @@ export function EditProfileForm() {
 					<Button
 						className="uppercase w-full font-semibold"
 						type="submit"
+						disabled={loading}
 					>
-						Save changes
+						{loading ? (
+							<>
+								<Loader2 className="mr-2 h-4 w-4 animate-spin" />{" "}
+								Please wait
+							</>
+						) : (
+							"Save changes"
+						)}
 					</Button>
 				</form>
 			</Form>

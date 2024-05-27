@@ -8,6 +8,7 @@ import { useToast } from "@/components/ui/use-toast";
 import axios from "axios";
 import { ATTENDANCE_URL, BASE_URL } from "@/app/slices/constants";
 import { NoAttendanceAlert } from "./NoAttendanceAlert";
+import Head from "./Head";
 
 interface Attendance {
 	_id: string;
@@ -69,23 +70,27 @@ const StudentContainer = ({ id }: { id: string }) => {
 	if (loading) return null;
 
 	return (
-		<div className="space-y-6">
-			<h3 className="text-xl md:text-2xl mb-4">Attendance</h3>
-			<p className="text-xs md:text-sm mb-4">
-				You have attended this course {attendance.length} times
-			</p>
-			{attendance.length === 0 && <NoAttendanceAlert />}
-			{attendance.map((attendance) => (
-				<div key={attendance._id}>
-					<Attendance
-						code={attendance.course.code}
-						image={attendance.course.user.image}
-						name={attendance.course.user.name}
-						date={attendance.date}
-					/>
-					<Separator className="my-6" />
-				</div>
-			))}
+		<div>
+			<Head />
+			<Separator className="my-10" />
+			<div className="space-y-6">
+				<h3 className="text-xl md:text-2xl mb-4">Attendance</h3>
+				<p className="text-xs md:text-sm mb-4">
+					You have attended this course {attendance.length} times
+				</p>
+				{attendance.length === 0 && <NoAttendanceAlert />}
+				{attendance.map((attendance) => (
+					<div key={attendance._id}>
+						<Attendance
+							code={attendance.course.code}
+							image={attendance.course.user.image}
+							name={attendance.course.user.name}
+							date={attendance.date}
+						/>
+						<Separator className="my-6" />
+					</div>
+				))}
+			</div>
 		</div>
 	);
 };

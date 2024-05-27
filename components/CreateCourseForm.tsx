@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/form";
 
 import { Input } from "@/components/ui/input";
-import { toast } from "@/components/ui/use-toast";
+import { useToast } from "@/components/ui/use-toast";
 import {
 	Select,
 	SelectContent,
@@ -23,6 +23,11 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+import { useSelector } from "react-redux";
+import { useState } from "react";
+import axios from "axios";
+import { BASE_URL, COURSES_URL } from "@/app/slices/constants";
+import { Loader2 } from "lucide-react";
 
 const FormSchema = z.object({
 	title: z.string().min(2, { message: "Course title is required!" }),
@@ -34,6 +39,12 @@ const FormSchema = z.object({
 });
 
 export function CreateCourseForm() {
+	const { toast } = useToast();
+
+	const [loading, setLoading] = useState<boolean>(false);
+
+	const { userInfo } = useSelector((state: any) => state.auth);
+
 	const form = useForm<z.infer<typeof FormSchema>>({
 		resolver: zodResolver(FormSchema),
 		defaultValues: {
@@ -43,18 +54,39 @@ export function CreateCourseForm() {
 		},
 	});
 
-	function onSubmit(data: z.infer<typeof FormSchema>) {
-		toast({
-			title: "You submitted the following values:",
-			description: (
-				<pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-					<code className="text-white">
-						{JSON.stringify(data, null, 2)}
-					</code>
-				</pre>
-			),
-		});
-	}
+	// 2. Define a submit handler.
+	const onSubmit = async (values: z.infer<typeof FormSchema>) => {
+		try {
+			setLoading(true);
+
+			const config = {
+				headers: {
+					"Content-type": "application/json",
+					"x-auth-token": userInfo.token,
+				},
+			};
+
+			const res = await axios.post(
+				`${BASE_URL}${COURSES_URL}/lecturers`,
+				values,
+				config
+			);
+			setLoading(false);
+			toast({
+				title: "Success!",
+				description: "You have successfully created a course!",
+			});
+		} catch (error: any) {
+			setLoading(false);
+			toast({
+				variant: "destructive",
+				title: "Uh oh! Something went wrong.",
+				description: error.response.data.message,
+			});
+		} finally {
+			setLoading(false);
+		}
+	};
 
 	return (
 		<div className="my-6">
@@ -107,7 +139,7 @@ export function CreateCourseForm() {
 								>
 									<FormControl>
 										<SelectTrigger>
-											<SelectValue placeholder="Select your level" />
+											<SelectValue placeholder="Select course unit" />
 										</SelectTrigger>
 									</FormControl>
 									<SelectContent>
@@ -128,8 +160,13 @@ export function CreateCourseForm() {
 					<Button
 						className="uppercase w-full font-semibold"
 						type="submit"
+						disabled={loading}
 					>
-						Save changes
+						{loading ? (
+							<Loader2 className="h-6 w-6 animate-spin text-white" />
+						) : (
+							"Save changes"
+						)}
 					</Button>
 				</form>
 			</Form>

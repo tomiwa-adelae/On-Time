@@ -7,7 +7,7 @@ import { EditProfileModal } from "./EditProfileModal";
 import { ChangePasswordModal } from "./ChangePasswordModal";
 import { ChangeImageModal } from "./ChangeImageModal";
 
-const Head = () => {
+const Head = ({ userInfo }: any) => {
 	return (
 		<div>
 			<div className="mt-8 md:mt-14 flex flex-col-reverse md:flex-row gap-10 items-center justify-start md:justify-between">
@@ -16,7 +16,7 @@ const Head = () => {
 						<div className="bg-green-100 p-2 md:p-4 inline rounded-lg mr-2">
 							<UserRound className="inline w-4 h-4 text-green-600" />
 						</div>
-						Tomiwa Adelae
+						{userInfo.name}
 					</h5>
 					<h5 className="text-base">
 						<div className="bg-green-100 p-2 md:p-4 inline rounded-lg mr-2">
@@ -25,29 +25,29 @@ const Head = () => {
 						<a
 							target="_blank"
 							rel="noopener noreferrer"
-							href="/"
+							href={`mailto:${userInfo.email}`}
 							className="transition ease-in-out hover:underline hover:text-green-400"
 						>
-							tomiwaadelae@gmail.com
+							{userInfo.email}
 						</a>
 					</h5>
 					<h5 className="text-base uppercase">
 						<div className="bg-green-100 p-2 md:p-4 inline rounded-lg mr-2">
 							<Hash className="inline w-4 h-4 text-green-600" />
 						</div>
-						20N07001
+						{userInfo.matricNumber}
 					</h5>
 					<h5 className="text-base">
 						<div className="bg-green-100 p-2 md:p-4 inline rounded-lg mr-2">
 							<Phone className="inline w-4 h-4 text-green-600" />
 						</div>
-						+234 708 4563 111
+						{userInfo.phoneNumber}
 					</h5>
 				</div>
 				<div className="flex flex-col items-center justify-center gap-4">
 					<Image
-						src={"/test.jpg"}
-						alt="Test user"
+						src={userInfo.image}
+						alt={userInfo.name}
 						height={1000}
 						width={1000}
 						className="w-24 h-24 object-cover rounded-full md:w-36 md:h-36 lg:w-44 lg:h-44"
