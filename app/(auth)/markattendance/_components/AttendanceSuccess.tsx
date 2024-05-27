@@ -57,7 +57,7 @@ const AttendanceSuccess = ({
 					className="uppercase w-full md:w-auto font-semibold px-12"
 					asChild
 				>
-					<Link href="/">Return to dashboard</Link>
+					<Link href="/dashboard">Return to dashboard</Link>
 				</Button>
 			</div>
 		</div>
