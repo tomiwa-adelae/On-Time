@@ -199,17 +199,118 @@ export function EditProfileForm() {
 										</SelectTrigger>
 									</FormControl>
 									<SelectContent>
-										<SelectItem value="physics">
-											physics
+										<SelectItem value="Accounting & Finance">
+											Accounting & Finance
 										</SelectItem>
-										<SelectItem value="computer science">
-											computer science
+										<SelectItem value="Agricultural economics">
+											Agricultural economics
 										</SelectItem>
-										<SelectItem value="biochemistry">
-											biochemistry
+										<SelectItem value="Architecture">
+											Architecture
 										</SelectItem>
-										<SelectItem value="nursing">
-											nursing
+										<SelectItem value="Banking & Finance">
+											Banking & Finance
+										</SelectItem>
+										<SelectItem value="Biochemistry">
+											Biochemistry
+										</SelectItem>
+										<SelectItem value="Business Administration">
+											Business Administration
+										</SelectItem>
+										<SelectItem value="Civil Engineering">
+											Civil Engineering
+										</SelectItem>
+										<SelectItem value="Computer Engineering">
+											Computer Engineering
+										</SelectItem>
+										<SelectItem value="Computer Science">
+											Computer Science
+										</SelectItem>
+										<SelectItem value="Crop & Animal Science">
+											Crop & Animal Science
+										</SelectItem>
+										<SelectItem value="Economics">
+											Economics
+										</SelectItem>
+										<SelectItem value="Electrical Engineering">
+											Electrical Engineering
+										</SelectItem>
+										<SelectItem value="English">
+											English
+										</SelectItem>
+										<SelectItem value="Entrepreneurship studies">
+											Entrepreneurship studies
+										</SelectItem>
+										<SelectItem value="Environmental Health Science">
+											Environmental Health Science
+										</SelectItem>
+										<SelectItem value="Estate Management">
+											Estate Management
+										</SelectItem>
+										<SelectItem value="Geo-Informatics">
+											Geo-Informatics
+										</SelectItem>
+										<SelectItem value="Geology">
+											Geology
+										</SelectItem>
+										<SelectItem value="History">
+											History
+										</SelectItem>
+										<SelectItem value="Industrial Chemistry">
+											Industrial Chemistry
+										</SelectItem>
+										<SelectItem value="Industrial Relations & Personnel Management">
+											Industrial Relations & Personnel
+											Management
+										</SelectItem>
+										<SelectItem value="International Studies">
+											International Studies
+										</SelectItem>
+										<SelectItem value="Law">Law</SelectItem>
+										<SelectItem value="Library & Information Science">
+											Library & Information Science
+										</SelectItem>
+										<SelectItem value="Mass Communication">
+											Mass Communication
+										</SelectItem>
+										<SelectItem value="Mathematics">
+											Mathematics
+										</SelectItem>
+										<SelectItem value="Mechanical Engineering">
+											Mechanical Engineering
+										</SelectItem>
+										<SelectItem value="Medical Lab Science">
+											Medical Lab Science
+										</SelectItem>
+										<SelectItem value="Microbiology">
+											Microbiology
+										</SelectItem>
+										<SelectItem value="Nursing">
+											Nursing
+										</SelectItem>
+										<SelectItem value="Peace Studies & Conflict Resolution">
+											Peace Studies & Conflict Resolution
+										</SelectItem>
+										<SelectItem value="Performing Arts & Musics">
+											Performing Arts & Musics
+										</SelectItem>
+										<SelectItem value="Physics">
+											Physics
+										</SelectItem>
+										<SelectItem value="Political Science">
+											Political Science
+										</SelectItem>
+										<SelectItem value="Radiography & Radiation Science">
+											Radiography & Radiation Science
+										</SelectItem>
+										<SelectItem value="Religious Studies">
+											Religious Studies
+										</SelectItem>
+										<SelectItem value="Statistics">
+											Statistics
+										</SelectItem>
+										<SelectItem value="Surveying">
+											Surveying
 										</SelectItem>
 									</SelectContent>
 								</Select>
@@ -233,13 +334,37 @@ export function EditProfileForm() {
 										</SelectTrigger>
 									</FormControl>
 									<SelectContent>
-										<SelectItem value="natural science">
-											natural science
+										<SelectItem value="Agriculture">
+											Agriculture
 										</SelectItem>
-										<SelectItem value="management science">
-											management science
+										<SelectItem value="Basic Medical Science">
+											Basic Medical Science
 										</SelectItem>
-										<SelectItem value="law">law</SelectItem>
+										<SelectItem value="Communication & Media Studies">
+											Communication & Media Studies
+										</SelectItem>
+										<SelectItem value="Education">
+											Education
+										</SelectItem>
+										<SelectItem value="Environmental Science">
+											Environmental Science
+										</SelectItem>
+										<SelectItem value="Humanities">
+											Humanities
+										</SelectItem>
+										<SelectItem value="Law">Law</SelectItem>
+										<SelectItem value="Management Science">
+											Management Science
+										</SelectItem>
+										<SelectItem value="Natural Science">
+											Natural Science
+										</SelectItem>
+										<SelectItem value="Peace Studies & Conflict Resolution">
+											Peace Studies & Conflict Resolution
+										</SelectItem>
+										<SelectItem value="Social Science">
+											Social Science
+										</SelectItem>
 									</SelectContent>
 								</Select>
 								<FormMessage />
