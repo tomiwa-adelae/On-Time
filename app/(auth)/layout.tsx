@@ -1,5 +1,5 @@
 "use client";
-import { redirect } from "next/navigation";
+import { redirect, usePathname, useSearchParams } from "next/navigation";
 import { useSelector } from "react-redux";
 
 export default function AuthLayout({
@@ -7,8 +7,16 @@ export default function AuthLayout({
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
+	const pathName = usePathname();
+	const searchParams = useSearchParams();
+
+	const id = searchParams.get("id");
+	const date = searchParams.get("date");
+
 	const { userInfo } = useSelector((state: any) => state.auth);
 
-	if (userInfo === null) return redirect("/signin");
+	if (userInfo === null)
+		return redirect(`/signin?redirect=${pathName}&id=${id}&date=${date}`);
+
 	return <div>{children}</div>;
 }

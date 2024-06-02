@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -36,6 +36,14 @@ const FormSchema = z.object({
 export function SignInForm() {
 	const { toast } = useToast();
 
+	const pathName = usePathname();
+
+	const searchParams = useSearchParams();
+
+	const id = searchParams.get("id");
+	const date = searchParams.get("date");
+	const redirect = searchParams.get("redirect");
+
 	const dispatch = useDispatch();
 	const router = useRouter();
 
@@ -45,9 +53,13 @@ export function SignInForm() {
 
 	useEffect(() => {
 		if (userInfo) {
-			return router.push("/dashboard");
+			const redirectURL =
+				redirect || id || date
+					? `${redirect}?id=${id}&date=${date}`
+					: "/dashboard";
+			return router.push(redirectURL);
 		}
-	}, [userInfo, router]);
+	}, [userInfo, router, date, id, redirect]);
 
 	const form = useForm<z.infer<typeof FormSchema>>({
 		resolver: zodResolver(FormSchema),
@@ -77,7 +89,11 @@ export function SignInForm() {
 				title: "Success!",
 				description: "You have successfully signed into your account",
 			});
-			router.push("/dashboard");
+			const redirectURL =
+				redirect || id || date
+					? `${redirect}?id=${id}&date=${date}`
+					: "/dashboard";
+			router.push(redirectURL);
 		} catch (error: any) {
 			setLoading(false);
 			toast({
