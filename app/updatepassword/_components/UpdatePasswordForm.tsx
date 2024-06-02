@@ -75,9 +75,9 @@ export function UpdatePasswordForm() {
 				setLoading(false);
 				toast({
 					title: "Successful!",
-					description: "Please enter login with your new password😁",
+					description: "Please enter login with your new password",
 				});
-				router.push(`/login`);
+				router.push(`/signin`);
 			} catch (error: any) {
 				setLoading(false);
 				toast({
