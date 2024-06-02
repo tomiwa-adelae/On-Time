@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import Wrapper from "./_components/Wrapper";
 
 import { Metadata } from "next";
@@ -13,7 +13,9 @@ const page = () => {
 			<h1 className="text-green-400 text-center md:text-left text-4xl md:text-5xl">
 				My Courses
 			</h1>
-			<Wrapper />
+			<Suspense fallback={<div>Loading...</div>}>
+				<Wrapper />
+			</Suspense>
 		</div>
 	);
 };

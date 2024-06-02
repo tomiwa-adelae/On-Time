@@ -4,6 +4,9 @@ const nextConfig = {
         domains: [
             "icon-library.com","res.cloudinary.com"
         ]
+    },
+    experimental:{
+        missingSuspenseWithCSRBailout: false
     }
 };
 

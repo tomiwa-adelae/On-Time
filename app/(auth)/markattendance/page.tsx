@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 const page = () => {
 	return (
 		<div className="container py-14">
-			<Suspense fallback={null}>
+			<Suspense fallback={"Nothing..."}>
 				<Wrapper />
 			</Suspense>
 		</div>

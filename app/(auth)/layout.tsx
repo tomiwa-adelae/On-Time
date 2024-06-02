@@ -1,5 +1,6 @@
 "use client";
 import { redirect, usePathname, useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 import { useSelector } from "react-redux";
 
 export default function AuthLayout({
@@ -18,5 +19,9 @@ export default function AuthLayout({
 	if (userInfo === null)
 		return redirect(`/signin?redirect=${pathName}&id=${id}&date=${date}`);
 
-	return <div>{children}</div>;
+	return (
+		<div>
+			<Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
+		</div>
+	);
 }
