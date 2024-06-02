@@ -14,10 +14,14 @@ import {
 	FormLabel,
 	FormMessage,
 } from "@/components/ui/form";
-import { toast } from "@/components/ui/use-toast";
+import { toast, useToast } from "@/components/ui/use-toast";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Input } from "@/components/ui/input";
+import { BASE_URL, USERS_URL } from "@/app/slices/constants";
+import { useState } from "react";
+import { Loader2 } from "lucide-react";
+import axios from "axios";
 
 const FormSchema = z.object({
 	newPassword: z.string().min(6, { message: "New password is required!" }),
@@ -33,6 +37,10 @@ export function UpdatePasswordForm() {
 	const code = searchParams.get("code");
 	const id = searchParams.get("id");
 
+	const { toast } = useToast();
+	const router = useRouter();
+	const [loading, setLoading] = useState<boolean>(false);
+
 	const form = useForm<z.infer<typeof FormSchema>>({
 		resolver: zodResolver(FormSchema),
 		defaultValues: {
@@ -41,18 +49,47 @@ export function UpdatePasswordForm() {
 		},
 	});
 
-	function onSubmit(data: z.infer<typeof FormSchema>) {
-		toast({
-			title: "You submitted the following values:",
-			description: (
-				<pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-					<code className="text-white">
-						{JSON.stringify(data, null, 2)}
-					</code>
-				</pre>
-			),
-		});
-	}
+	const onSubmit = async (values: z.infer<typeof FormSchema>) => {
+		if (values.newPassword !== values.confirmPassword) {
+			toast({
+				variant: "destructive",
+				title: "Uh oh! Something went wrong.",
+				description: "Passwords do not match!",
+			});
+		} else {
+			try {
+				setLoading(true);
+				const config = {
+					headers: {
+						"Content-type": "application/json",
+					},
+					withCredentials: true,
+				};
+				const newPassword = values.newPassword;
+				const confirmPassword = values.confirmPassword;
+				await axios.post(
+					`${BASE_URL}${USERS_URL}/update-password/${id}/${code}`,
+					{ id, code, newPassword, confirmPassword },
+					config
+				);
+				setLoading(false);
+				toast({
+					title: "Successful!",
+					description: "Please enter login with your new password😁",
+				});
+				router.push(`/login`);
+			} catch (error: any) {
+				setLoading(false);
+				toast({
+					variant: "destructive",
+					title: "Uh oh! Something went wrong.",
+					description: error.response.data.message,
+				});
+			} finally {
+				setLoading(false);
+			}
+		}
+	};
 
 	return (
 		<div className="w-full md:w-3/5">
@@ -107,8 +144,16 @@ export function UpdatePasswordForm() {
 					<Button
 						className="uppercase font-semibold w-full md:w-auto"
 						type="submit"
+						disabled={loading}
 					>
-						Submit
+						{loading ? (
+							<>
+								<Loader2 className="mr-2 h-4 w-4 animate-spin" />{" "}
+								Please wait
+							</>
+						) : (
+							"Submit"
+						)}
 					</Button>
 					<p className="text-sm text-center lg:text-center">
 						Remembered your password already?{" "}

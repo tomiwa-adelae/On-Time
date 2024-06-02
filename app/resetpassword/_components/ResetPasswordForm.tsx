@@ -15,15 +15,24 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { toast } from "@/components/ui/use-toast";
+import { useToast } from "@/components/ui/use-toast";
 import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
+import { useState } from "react";
+import axios from "axios";
+import { BASE_URL, USERS_URL } from "@/app/slices/constants";
+import { useRouter } from "next/navigation";
+import { Loader2 } from "lucide-react";
 
 const FormSchema = z.object({
 	email: z.string().email({ message: "Email is required!" }),
 });
 
 export function ResetPasswordForm() {
+	const { toast } = useToast();
+	const router = useRouter();
+	const [loading, setLoading] = useState<boolean>(false);
+
 	const form = useForm<z.infer<typeof FormSchema>>({
 		resolver: zodResolver(FormSchema),
 		defaultValues: {
@@ -31,18 +40,40 @@ export function ResetPasswordForm() {
 		},
 	});
 
-	function onSubmit(data: z.infer<typeof FormSchema>) {
-		toast({
-			title: "You submitted the following values:",
-			description: (
-				<pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-					<code className="text-white">
-						{JSON.stringify(data, null, 2)}
-					</code>
-				</pre>
-			),
-		});
-	}
+	// 2. Define a submit handler.
+	const onSubmit = async (values: z.infer<typeof FormSchema>) => {
+		setLoading(true);
+		const config = {
+			headers: {
+				"Content-type": "application/json",
+			},
+			withCredentials: true,
+		};
+
+		try {
+			await axios.post(
+				`${BASE_URL}${USERS_URL}/reset-password`,
+				values,
+				config
+			);
+			setLoading(false);
+			toast({
+				title: "Successful!",
+				description:
+					"Please enter the code we just sent to your email inbox",
+			});
+			router.push(`/verifycode?email=${values.email}`);
+		} catch (error: any) {
+			setLoading(false);
+			toast({
+				variant: "destructive",
+				title: "Uh oh! Something went wrong.",
+				description: error.response.data.message,
+			});
+		} finally {
+			setLoading(false);
+		}
+	};
 
 	return (
 		<div className="w-full md:w-3/5">
@@ -77,8 +108,16 @@ export function ResetPasswordForm() {
 					<Button
 						className="uppercase font-semibold w-full md:w-auto"
 						type="submit"
+						disabled={loading}
 					>
-						Submit
+						{loading ? (
+							<>
+								<Loader2 className="mr-2 h-4 w-4 animate-spin" />{" "}
+								Please wait
+							</>
+						) : (
+							"Submit"
+						)}
 					</Button>
 					<p className="text-sm text-center lg:text-center">
 						Remembered your password already?{" "}
