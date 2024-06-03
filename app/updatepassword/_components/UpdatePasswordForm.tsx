@@ -108,7 +108,7 @@ export function UpdatePasswordForm() {
 							<FormItem>
 								<FormLabel>New password</FormLabel>
 								<FormControl>
-									<Input
+									<Input type="password"
 										placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;"
 										{...field}
 									/>
@@ -128,7 +128,7 @@ export function UpdatePasswordForm() {
 							<FormItem>
 								<FormLabel>Confirm password</FormLabel>
 								<FormControl>
-									<Input
+									<Input type="password"
 										placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;"
 										{...field}
 									/>
