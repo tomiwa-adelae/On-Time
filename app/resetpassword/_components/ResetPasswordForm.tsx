@@ -123,7 +123,7 @@ export function ResetPasswordForm() {
 						Remembered your password already?{" "}
 						<Link
 							className="hover:underline hover:text-green-400"
-							href="/sign"
+							href="/signin"
 						>
 							Sign in now
 						</Link>
